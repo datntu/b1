@@ -1,0 +1,53 @@
+﻿<Window x:Class="b1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mv="clr-namespace:b1.ViewModels"
+        xmlns:local="clr-namespace:b1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="200"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Wnc"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="10"/>
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Text="System control vision"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="10"/>
+        <!--nut bam -->
+        <StackPanel Grid.Row="1"
+                    Grid.Column="0"
+                    >
+            <Button Content="OpenCam"
+                    Command="{Binding OpenCamCommand}"
+                    Height="30"
+                    Width="80"
+                    Margin="10"/>
+            <Button Content="CloseCam"
+                    Command="{Binding CloseCamCommand}"
+                    Height="30"
+                    Width="80"
+                    Margin="10"/>
+        </StackPanel>
+        <!--khung Hien thi camera-->
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                >
+            <Image Source="{Binding CameraImage}"
+                   Stretch="Uniform"/>
+        </Border>
+        
+    </Grid>
+</Window>
