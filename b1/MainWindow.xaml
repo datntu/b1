@@ -40,6 +40,12 @@
                     Height="30"
                     Width="80"
                     Margin="10"/>
+			<TextBlock Text="{Binding ObjectCount,
+                          StringFormat='Object Count: {0}'}"
+                          FontSize="12"
+                          FontWeight="Bold"
+                          Margin="5" Height="94" Width="94"/>
+			
         </StackPanel>
         <!--khung Hien thi camera-->
         <Border Grid.Row="1"

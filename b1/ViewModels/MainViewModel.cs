@@ -27,6 +27,23 @@ namespace b1.ViewModels
                     new PropertyChangedEventArgs("CameraImage"));
             }
         }
+        private int objectCount;
+
+        public int ObjectCount
+        {
+            get
+            {
+                return objectCount;
+            }
+            set
+            {
+                objectCount = value;
+
+                PropertyChanged?.Invoke(
+                    this,
+                    new PropertyChangedEventArgs("ObjectCount"));
+            }
+        }
         //timer cap nhat hinh anh
         private DispatcherTimer timer;
         public RelayCommand OpenCamCommand { get; set; }
@@ -42,7 +59,7 @@ namespace b1.ViewModels
         //ham mo cam 
         public void OpenCamera()
         {
-            camera = new VideoCapture(0);
+            camera = new VideoCapture(1);
             if (camera.IsOpened())
             {
                 timer.Start();
@@ -81,13 +98,13 @@ namespace b1.ViewModels
              //   gray.Dispose();
                 // b2 : chuyen anh xam ==> den, trang
                 Mat binary = new Mat();
-                Cv2.Threshold(gray, binary, 120, 255, ThresholdTypes.Binary);
+                Cv2.Threshold(gray, binary, 110, 255, ThresholdTypes.Binary);
                 //hien thi b2
                 //    BitmapSource image = binary.ToBitmapSource();
-                //    image.Freeze();
-                //    CameraImage = image;
-                //    gray.Dispose();
-                //    binary.Dispose();
+                //   image.Freeze();
+                //     CameraImage = image;
+                //     gray.Dispose();
+                //     binary.Dispose();
                 // BUOC 3
                 // TIM CONTOUR
                 // =========================
@@ -104,19 +121,40 @@ namespace b1.ViewModels
                 // BUOC 4
                 // VE KHUNG VAT THE
                 // =========================
-
+                int count = 0;
                 foreach (Point[] contour in contours)
                 {
-                    Rect rect =
-                        Cv2.BoundingRect(contour);
+                    double area = Cv2.ContourArea(contour);
 
+                    if (area > 500)
+                    {
+                        count++;
 
-                    Cv2.Rectangle(
-                        frame,
-                        rect,
-                        Scalar.Red,
-                        2);
+                        Rect rect = Cv2.BoundingRect(contour);
+
+                        Cv2.Rectangle(
+                            frame,
+                            rect,
+                            Scalar.Red,
+                            2);
+                        //tinh tao do tam 
+                        int centerx = rect.X + rect.Width / 2;
+                        int centery = rect.Y + rect.Height / 2;
+                        //ve dau cong tai tam vat the 
+                        Cv2.DrawMarker(frame, new Point(centerx, centery), Scalar.Lime, MarkerTypes.Cross, 20, 2);
+                        //hien thi tao do tam tren anh 
+                        string postion = "x:" + centerx + "," + centery + ")";
+                        Cv2.PutText(
+                                     frame,
+                                     postion,
+                                     new Point(rect.X, Math.Max(rect.Y - 8, 20)),
+                                     HersheyFonts.HersheySimplex,
+                                     0.6,
+                                     Scalar.Yellow,
+                                        2);
+                    }
                 }
+                ObjectCount = count;
 
 
                 // =========================
